@@ -44,6 +44,7 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
   void clearError() {
     _error = null;
     notifyListeners();
@@ -63,6 +64,8 @@ class CartProvider extends ChangeNotifier {
       _setCartLoading(false);
     }
   }
+
+
 
   // ────────────────────────────────────────────────
   // MUTATIONS (ADD / UPDATE / INCREASE / DECREASE)

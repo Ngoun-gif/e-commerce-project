@@ -5,13 +5,13 @@ import '../services/checkout_service.dart';
 class OrderProvider extends ChangeNotifier {
   bool _loading = false;
   String? _error;
-  OrderResponse? _lastOrder;
-  List<OrderResponse> _orders = [];
+  CheckoutResponse? _lastOrder;
+  List<CheckoutResponse> _orders = [];
 
   bool get loading => _loading;
   String? get error => _error;
-  OrderResponse? get lastOrder => _lastOrder;
-  List<OrderResponse> get orders => _orders;
+  CheckoutResponse? get lastOrder => _lastOrder;
+  List<CheckoutResponse> get orders => _orders;
 
   void _start() {
     _loading = true;
@@ -35,7 +35,7 @@ class OrderProvider extends ChangeNotifier {
   Future<void> checkout(String paymentMethod) async {
     _start();
     try {
-      final res = await OrderService.checkout(paymentMethod);
+      final res = await CheckoutService.checkout(paymentMethod);
       _lastOrder = res;
 
       // add new checkout to history
@@ -53,7 +53,7 @@ class OrderProvider extends ChangeNotifier {
   Future<void> loadMyOrders() async {
     _start();
     try {
-      _orders = await OrderService.getMyOrders();
+      _orders = await CheckoutService.getMyOrders();
     } catch (e) {
       _error = e.toString();
     }

@@ -1,13 +1,13 @@
 import 'checkout_items_response.dart';
 
-class OrderResponse {
+class CheckoutResponse{
   final int orderId;
   final double totalPrice;
   final String status;
   final String paymentMethod;
-  final List<OrderItemRes> items;
+  final List<CheckoutItemRes> items;
 
-  OrderResponse({
+  CheckoutResponse({
     required this.orderId,
     required this.totalPrice,
     required this.status,
@@ -15,14 +15,14 @@ class OrderResponse {
     required this.items,
   });
 
-  factory OrderResponse.fromJson(Map<String, dynamic> json) {
-    return OrderResponse(
+  factory CheckoutResponse.fromJson(Map<String, dynamic> json) {
+    return CheckoutResponse(
       orderId: json["orderId"],
       totalPrice: double.tryParse(json["totalPrice"].toString()) ?? 0,
       status: json["status"],
       paymentMethod: json["paymentMethod"],
       items: (json["items"] as List? ?? [])
-          .map((e) => OrderItemRes.fromJson(e))
+          .map((e) => CheckoutItemRes.fromJson(e))
           .toList(),
     );
   }

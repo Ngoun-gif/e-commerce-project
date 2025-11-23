@@ -5,7 +5,7 @@ import '../../../config/api_config_checkout.dart';
 import '../../auth/services/auth_service.dart';
 import '../model/checkout_response.dart';
 
-class OrderService {
+class CheckoutService {
 
   static Future<Map<String, String>> _headers() async {
     final token = await AuthService.getToken();
@@ -18,7 +18,7 @@ class OrderService {
   // ===============================
   // CHECKOUT
   // ===============================
-  static Future<OrderResponse> checkout(String method) async {
+  static Future<CheckoutResponse> checkout(String method) async {
     final headers = await _headers();
 
     final res = await http.post(
@@ -31,13 +31,13 @@ class OrderService {
       throw Exception(_extractError(res.body, "Checkout failed"));
     }
 
-    return OrderResponse.fromJson(jsonDecode(res.body));
+    return CheckoutResponse.fromJson(jsonDecode(res.body));
   }
 
   // ===============================
   // GET MY ORDERS
   // ===============================
-  static Future<List<OrderResponse>> getMyOrders() async {
+  static Future<List<CheckoutResponse>> getMyOrders() async {
     final headers = await _headers();
 
     final res = await http.get(
@@ -50,7 +50,7 @@ class OrderService {
     }
 
     final list = jsonDecode(res.body) as List;
-    return list.map((e) => OrderResponse.fromJson(e)).toList();
+    return list.map((e) => CheckoutResponse.fromJson(e)).toList();
   }
 
   // ===============================

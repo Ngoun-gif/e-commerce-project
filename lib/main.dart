@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecom/modules/checkout/provider/checkout_provider.dart';
+import 'package:flutter_ecom/modules/payment/provider/payment_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'routers/app_routes.dart';
@@ -28,6 +29,7 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductDetailProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => PaymentProvider()), // <-- ADD THIS
 
       ],
       child: MaterialApp(

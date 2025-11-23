@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/modules/payment/screens/payment_screen.dart';
+import 'package:flutter_ecom/modules/payment/screens/success_payment_screen.dart';
 
 
 import '../modules/splash/screens/splash_screen.dart';
@@ -18,6 +20,8 @@ class AppRoutes {
   static const String productDetail = "/product-detail";
   static const String cart = "/cart";
   static const String checkout = "/checkout";
+  static const String payment = "/payment";
+  static const String successPayment = "/payment-success";
 
   static Map<String, WidgetBuilder> routes = {
     splash: (_) => const SplashScreen(),
@@ -27,9 +31,21 @@ class AppRoutes {
     cart: (_) => const CartScreen(),
     checkout: (_) => const CheckoutScreen(),
 
+
     productDetail: (context) {
       final id = ModalRoute.of(context)!.settings.arguments as int;
       return ProductDetailScreen(productId: id);
     },
+    payment: (context) {
+      final args = ModalRoute.of(context)!.settings.arguments as Map;
+      final int orderId = args['orderId'];
+      final String method = args['method'];
+      return PaymentScreen(orderId: orderId, method: method);
+    },
+    successPayment: (_) => const SuccessPaymentScreen(),
+
+
+
+
   };
 }

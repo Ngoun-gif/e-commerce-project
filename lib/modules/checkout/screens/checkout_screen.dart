@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecom/modules/checkout/model/checkout_response.dart';
 import 'package:flutter_ecom/modules/checkout/provider/checkout_provider.dart';
+import 'package:flutter_ecom/routers/app_routes.dart';
 import 'package:provider/provider.dart';
 
 import '../../cart/provider/cart_provider.dart';
@@ -39,23 +40,32 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     await orderProvider.checkout(_selectedPaymentMethod);
 
     if (orderProvider.error == null && orderProvider.lastOrder != null) {
-      // Clear cart and show nice success dialog
-      await cartProvider.clear();
-      _showSuccessDialog(orderProvider.lastOrder!);
+      // clear local cart UI but NOT backend (backend should do stock logic)
+      cartProvider.clearError();
+
+      // Go to payment screen
+      Navigator.pushNamed(
+        context,
+        AppRoutes.payment,
+        arguments: {
+          'orderId': orderProvider.lastOrder!.orderId,
+          'method': orderProvider.lastOrder!.paymentMethod,
+        },
+      );
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Checkout failed: ${orderProvider.error}"),
             backgroundColor: Colors.red,
-            duration: const Duration(seconds: 3),
           ),
         );
       }
     }
   }
 
-  void _showSuccessDialog(OrderResponse order) {
+
+  void _showSuccessDialog(CheckoutResponse order) {
     showDialog(
       context: context,
       barrierDismissible: false,
