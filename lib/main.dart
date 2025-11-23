@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/modules/checkout/provider/checkout_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'routers/app_routes.dart';
@@ -7,6 +8,7 @@ import 'modules/home/providers/category_provider.dart';
 import 'modules/home/providers/product_provider.dart';
 import 'modules/product_detail/provider/product_detail_provider.dart';
 import 'modules/cart/provider/cart_provider.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +27,8 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductProvider()..loadProducts()),
         ChangeNotifierProvider(create: (_) => ProductDetailProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
