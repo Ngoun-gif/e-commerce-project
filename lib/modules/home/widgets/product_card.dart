@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:flutter_ecom/modules/wishlist/widgets/product_favorite_button.dart';
 import '../../../routers/app_routes.dart';
 
 import '../models/product.dart';
@@ -82,30 +84,10 @@ class ProductCard extends StatelessWidget {
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.favorite_border,
-                          color: Colors.grey[600],
-                          size: 16,
-                        ),
-                        onPressed: () {},
-                        padding: EdgeInsets.zero,
-                      ),
-                    ),
-                  ),
+                    child: ProductFavoriteButton(productId: product.id),
+                  )
+
+
                 ],
               ),
             ),

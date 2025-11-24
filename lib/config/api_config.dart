@@ -1,13 +1,20 @@
 class ApiConfig {
-  // ==========================================================
-  // =               ENVIRONMENT / NETWORK SETUP              =
-  // ==========================================================
+
+
+// ==========================================================
+// =               ENVIRONMENT / NETWORK SETUP              =
+// ==========================================================
 
   /// Laptop IP for physical Android device (same WiFi / LAN)
-  static const String laptopIp = "192.168.1.5:8081";
+  static const String laptopIp = "192.168.0.87:8081";
+
+  /// Phone hotspot IP (when backend runs from phone network or LAN)
+  static const String phone = "10.93.7.44:8081";
 
   /// Android Emulator → maps to your PC localhost
   static const String emulatorHost = "10.0.2.2:8081";
+
+
 
   /// Switch environment:
   /// true  = physical Android device
@@ -15,7 +22,7 @@ class ApiConfig {
   static const bool usePhysicalDevice = false;
 
   /// Auto-selected host
-  static String get _host => usePhysicalDevice ? laptopIp : emulatorHost;
+  static String get _host => usePhysicalDevice ? phone : laptopIp;
 
   /// Base API → matches backend `/api/**`
   static String get apiBase => "http://$_host/api";
