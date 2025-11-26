@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../../../routers/app_routes.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -163,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             );
 
-                            Navigator.pushReplacementNamed(context, "/login");
+                            Navigator.pushReplacementNamed(context, AppRoutes.login);
 
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -190,7 +191,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, "/login");
+                        Navigator.pushReplacementNamed(context, AppRoutes.login);
                       },
                       child: RichText(
                         text: TextSpan(

@@ -7,6 +7,7 @@ import '../models/login_request.dart';
 import '../models/register_request.dart';
 import '../models/auth_response.dart';
 
+// lib/modules/auth/provider/auth_provider.dart
 class AuthProvider extends ChangeNotifier {
   UserModel? _user;
   String? _accessToken;
@@ -18,44 +19,49 @@ class AuthProvider extends ChangeNotifier {
   bool get loading => _loading;
   String? get error => _error;
 
+  // ADD THIS: Check initial auth state
+  Future<void> checkAuthStatus() async {
+    _start();
+    try {
+      _accessToken = await AuthService.getToken();
+      if (_accessToken != null) {
+        _user = await UserService.getMe();
+      }
+    } catch (e) {
+      _error = e.toString();
+      _accessToken = null; // Clear token if it's invalid
+      _user = null;
+    }
+    _finish();
+  }
+
   Future<void> login(String email, String password) async {
     _start();
-
     try {
       final req = LoginRequest(email: email, password: password);
       final AuthResponse res = await AuthService.login(req);
-
       _accessToken = res.accessToken;
-
-      // Fetch authenticated user
       _user = await UserService.getMe();
     } catch (e) {
       _error = e.toString();
     }
-
     _finish();
   }
 
   Future<void> register(String fullName, String email, String password) async {
     _start();
-
     try {
       final req = RegisterRequest(
         fullName: fullName,
         email: email,
         password: password,
       );
-
       final AuthResponse res = await AuthService.register(req);
-
       _accessToken = res.accessToken;
-
-      // Fetch authenticated user
       _user = await UserService.getMe();
     } catch (e) {
       _error = e.toString();
     }
-
     _finish();
   }
 

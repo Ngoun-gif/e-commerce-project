@@ -23,6 +23,7 @@ class AppRoutes {
   static const String payment = "/payment";
   static const String successPayment = "/payment-success";
 
+
   static Map<String, WidgetBuilder> routes = {
     splash: (_) => const SplashScreen(),
     main: (_) => const BottomBarLayout(),

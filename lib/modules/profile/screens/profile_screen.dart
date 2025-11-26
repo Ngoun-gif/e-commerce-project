@@ -23,6 +23,7 @@ class ProfileScreen extends StatelessWidget {
           title: const Text("Profile"),
           backgroundColor: Colors.transparent,
           elevation: 0,
+          automaticallyImplyLeading: false, // ← Add this line
         ),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -127,6 +128,7 @@ class ProfileScreen extends StatelessWidget {
         title: const Text("Profile"),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false, // ← Add this line
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_outlined),

@@ -59,7 +59,9 @@ class CartProvider extends ChangeNotifier {
       _cart = await CartService.getCart();
       _setError(null);
     } catch (e) {
-      _setError(e.toString());
+      // Convert 403 error to user-friendly message
+      final errorMessage = _getUserFriendlyErrorMessage(e.toString());
+      _setError(errorMessage);
     } finally {
       _setCartLoading(false);
     }
@@ -141,4 +143,23 @@ class CartProvider extends ChangeNotifier {
       _setMutating(false);
     }
   }
+  // ────────────────────────────────────────────────
+  // USER-FRIENDLY ERROR MESSAGES
+  // ────────────────────────────────────────────────
+  String _getUserFriendlyErrorMessage(String error) {
+    if (error.contains('403')) {
+      return 'Please login to view your cart';
+    } else if (error.contains('401')) {
+      return 'Please login to view your cart';
+    } else if (error.contains('404')) {
+      return 'Cart not found';
+    } else if (error.contains('500')) {
+      return 'Server error. Please try again later';
+    } else if (error.contains('timeout') || error.contains('SocketException')) {
+      return 'Network error. Please check your connection';
+    } else {
+      return 'Failed to load cart. Please try again';
+    }
+  }
+
 }

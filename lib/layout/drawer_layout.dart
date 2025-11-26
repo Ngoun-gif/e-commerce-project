@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/modules/payment_history/screens/payment_history_screen.dart';
+
 
 class DrawerLayout extends StatelessWidget {
   const DrawerLayout({super.key});
@@ -25,16 +27,24 @@ class DrawerLayout extends StatelessWidget {
             ),
           ),
 
+          // 🔥 PAYMENT HISTORY - Updated with navigation
           ListTile(
-            leading: Icon(Icons.history, color: Color(0xFF0D47A1)),
+            leading: Icon(Icons.payment, color: Color(0xFF0D47A1)), // Changed icon to payment
             title: Text(
-              "Order History",
+              "Payment History",
               style: TextStyle(color: Color(0xFF0D47A1)),
             ),
             onTap: () {
-              // Add navigation for Order History
+              Navigator.pop(context); // Close drawer first
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PaymentHistoryScreen(),
+                ),
+              );
             },
           ),
+
           ListTile(
             leading: Icon(Icons.settings, color: Color(0xFF0D47A1)),
             title: Text(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../model/payment_history_model.dart';
+import 'package:flutter_ecom/modules/payment_history/models/payment_history_model.dart';
+
 
 class PaymentCard extends StatelessWidget {
   final PaymentHistoryModel payment;

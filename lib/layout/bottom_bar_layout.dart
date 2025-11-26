@@ -10,6 +10,9 @@ import '../modules/profile/screens/profile_screen.dart';
 class BottomBarLayout extends StatefulWidget {
   static int currentIndex = 0;
 
+  /// 🔥 Expose function to change tab globally
+  static void Function(int index)? changeTab;
+
   const BottomBarLayout({super.key});
 
   @override
@@ -24,6 +27,25 @@ class _BottomBarLayoutState extends State<BottomBarLayout> {
     CartScreen(),
     ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    /// Register global tab function
+    BottomBarLayout.changeTab = (int index) {
+      setState(() {
+        BottomBarLayout.currentIndex = index;
+      });
+    };
+  }
+
+  @override
+  void dispose() {
+    /// Clean up static
+    BottomBarLayout.changeTab = null;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

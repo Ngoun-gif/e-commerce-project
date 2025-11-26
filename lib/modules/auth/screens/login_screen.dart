@@ -30,6 +30,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: Colors.black, // Makes the back arrow black
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -126,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ? null
                 : () => _handleLogin(auth),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0D47A1), // Your specified blue
+              backgroundColor: const Color(0xFF0D47A1),
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -200,9 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print("Email: ${auth.user!.email}");
       print("=================================");
 
-      // show stored prefs
       await _debugTokens();
-
       Navigator.pushReplacementNamed(context, AppRoutes.main);
     } else {
       print("====== LOGIN FAILED ======");
