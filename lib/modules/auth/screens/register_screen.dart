@@ -12,16 +12,11 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final firstNameCtrl = TextEditingController();
-  final lastNameCtrl = TextEditingController();
   final usernameCtrl = TextEditingController();
   final emailCtrl = TextEditingController();
-  final phoneCtrl = TextEditingController();
   final passCtrl = TextEditingController();
-  final confirmPassCtrl = TextEditingController();
 
   bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -46,51 +41,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              // Header Section
-              Container(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    Text(
-                      "Create Account",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "Sign up to get started",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70,
-                      ),
-                    ),
-                  ],
+
+              /// header
+              Text(
+                "Create Account",
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 8),
+              Text(
+                "Sign up to get started",
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white70,
+                ),
+              ),
+              const SizedBox(height: 40),
 
-              // Form Section
+              /// card container
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
                 ),
                 child: Column(
                   children: [
-
-                    // Username
+                    // username
                     TextField(
                       controller: usernameCtrl,
                       decoration: InputDecoration(
@@ -105,9 +85,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Email
+                    // email
                     TextField(
                       controller: emailCtrl,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: "Email",
                         prefixIcon: const Icon(Icons.email_outlined),
@@ -117,25 +98,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         filled: true,
                         fillColor: Colors.grey[50],
                       ),
-                      keyboardType: TextInputType.emailAddress,
                     ),
                     const SizedBox(height: 16),
-                    // Password
+
+                    // password
                     TextField(
                       controller: passCtrl,
+                      obscureText: _obscurePassword,
                       decoration: InputDecoration(
                         labelText: "Password",
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
+                          icon: Icon(_obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility),
                           onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
+                            setState(() => _obscurePassword = !_obscurePassword);
                           },
                         ),
                         border: OutlineInputBorder(
@@ -144,43 +122,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         filled: true,
                         fillColor: Colors.grey[50],
                       ),
-                      obscureText: _obscurePassword,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Confirm Password
-                    TextField(
-                      controller: confirmPassCtrl,
-                      decoration: InputDecoration(
-                        labelText: "Confirm Password",
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscureConfirmPassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
-                            });
-                          },
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey[50],
-                      ),
-                      obscureText: _obscureConfirmPassword,
                     ),
                     const SizedBox(height: 24),
 
-                    // Error message if any
-                    if (auth.error != null)
+                    /// error from provider
+                    if (auth.error != null) ...[
                       Container(
-                        width: double.infinity,
                         padding: const EdgeInsets.all(12),
+                        width: double.infinity,
                         decoration: BoxDecoration(
                           color: Colors.red[50],
                           borderRadius: BorderRadius.circular(8),
@@ -191,9 +140,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: const TextStyle(color: Colors.red),
                         ),
                       ),
-                    if (auth.error != null) const SizedBox(height: 16),
+                      const SizedBox(height: 16),
+                    ],
 
-                    // Register Button
+                    /// register button
                     auth.loading
                         ? const CircularProgressIndicator()
                         : SizedBox(
@@ -206,9 +156,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          elevation: 2,
                         ),
-                        onPressed: _validateAndRegister,
+                        onPressed: _register,
                         child: const Text(
                           "Create Account",
                           style: TextStyle(
@@ -218,35 +167,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                     ),
-
-                    const SizedBox(height: 20),
-
-                    // Login redirect
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, AppRoutes.login);
-                      },
-                      child: RichText(
-                        text: TextSpan(
-                          text: "Already have an account? ",
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                          ),
-                          children: const [
-                            TextSpan(
-                              text: "Login",
-                              style: TextStyle(
-                                color: Color(0xFF0D47A1),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
+
+              const SizedBox(height: 16),
+
+              /// go to login
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, AppRoutes.login);
+                },
+                child: RichText(
+                  text: TextSpan(
+                    text: "Already have an account? ",
+                    style: TextStyle(color: Colors.grey[300]),
+                    children: const [
+                      TextSpan(
+                        text: "Login",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -254,79 +201,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void _validateAndRegister() async {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
+  // ---------------- Registration logic ----------------
+  Future<void> _register() async {
+    final auth = context.read<AuthProvider>();
 
-    // Validation
-    if (firstNameCtrl.text.isEmpty ||
-        lastNameCtrl.text.isEmpty ||
-        usernameCtrl.text.isEmpty ||
+    if (usernameCtrl.text.isEmpty ||
         emailCtrl.text.isEmpty ||
-        phoneCtrl.text.isEmpty ||
         passCtrl.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fill in all fields"),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    if (passCtrl.text != confirmPassCtrl.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Passwords do not match"),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _error("Please fill in all fields");
       return;
     }
 
     if (passCtrl.text.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Password must be at least 6 characters"),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _error("Password must be at least 6 characters");
       return;
     }
 
     try {
       await auth.register(
-        firstNameCtrl.text.trim(),
-        lastNameCtrl.text.trim(),
         usernameCtrl.text.trim(),
         emailCtrl.text.trim(),
-        phoneCtrl.text.trim(),
         passCtrl.text.trim(),
       );
 
       if (auth.isAuthenticated) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Registration successful!"),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.pushReplacementNamed(context, AppRoutes.main);
+        _success("Registration successful!");
+
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
       }
     } catch (e) {
-      // Error is already handled in the provider
-      print("Registration error: $e");
+      debugPrint("Register error: $e");
     }
+  }
+
+  void _error(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), backgroundColor: Colors.red),
+    );
+  }
+
+  void _success(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), backgroundColor: Colors.green),
+    );
   }
 
   @override
   void dispose() {
-    firstNameCtrl.dispose();
-    lastNameCtrl.dispose();
     usernameCtrl.dispose();
     emailCtrl.dispose();
-    phoneCtrl.dispose();
     passCtrl.dispose();
-    confirmPassCtrl.dispose();
     super.dispose();
   }
 }

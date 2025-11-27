@@ -68,11 +68,10 @@ class AuthProvider extends ChangeNotifier {
   // In your AuthProvider class, update the register method:
 
   Future<void> register(
-      String firstname,
-      String lastname,
+
       String username,
       String email,
-      String phone,
+
       String password,
       ) async {
     _start();
@@ -81,9 +80,7 @@ class AuthProvider extends ChangeNotifier {
         email: email,
         password: password,
         username: username,
-        firstname: firstname,
-        lastname: lastname,
-        phone: phone,
+
       );
 
       final AuthResponse res = await AuthService.register(req);
