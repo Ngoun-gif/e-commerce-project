@@ -12,6 +12,7 @@ class ProductDetailBody extends StatelessWidget {
       slivers: [
         // IMAGE HEADER
         SliverAppBar(
+          automaticallyImplyLeading: false, // 👈 REMOVE ARROW
           backgroundColor: Colors.transparent,
           elevation: 0,
           expandedHeight: 300,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/layout/bottom_bar_layout.dart';
 import 'package:flutter_ecom/theme/app_colors.dart';
 import '../../../routers/app_routes.dart';
 
@@ -53,10 +54,11 @@ class WishlistEmptyView extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
+                  Navigator.pushReplacement(
                     context,
-                    AppRoutes.main,
-                        (_) => false,
+                    MaterialPageRoute(
+                      builder: (_) => const BottomBarLayout(initialIndex: 0),
+                    ),
                   );
                 },
                 child: const Text(
@@ -69,26 +71,20 @@ class WishlistEmptyView extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 60),
+            const SizedBox(height: 40),
 
-            // Divider
-            const Divider(height: 40),
-
-            // Section Title
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Wishlist",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black87,
-                ),
+            // Big Shopping Cart Icon (Below Explore Button)
+            Container(
+              margin: const EdgeInsets.only(bottom: 40),
+              child: Icon(
+                Icons.shopping_cart_outlined,
+                size: 240,
+                color: Colors.grey.shade300,
               ),
             ),
 
+            const SizedBox(height: 60),
             const SizedBox(height: 24),
-
           ],
         ),
       ),
