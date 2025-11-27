@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/layout/bottom_bar_layout.dart';
 import 'package:provider/provider.dart';
 
 import '../../auth/providers/auth_provider.dart';
@@ -449,7 +450,13 @@ class ProfileScreen extends StatelessWidget {
               onPressed: () async {
                 Navigator.of(context).pop();
                 await auth.logout();
-                Navigator.pushReplacementNamed(context, AppRoutes.main);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const BottomBarLayout(initialIndex: 0),
+                  ),
+                );
+
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.red,

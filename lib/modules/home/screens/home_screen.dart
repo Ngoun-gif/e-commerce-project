@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/utils/global_refresh.dart';
 
 // import your widgets
 import '../widgets/home_search_bar.dart';
@@ -12,27 +13,25 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: const [
-
-        // 🔍 Search
-        HomeSearchBar(),
-        SizedBox(height: 20),
-
-        // 🖼 Banner Slider
-        HomeBannerSlider(),
-        SizedBox(height: 20),
-
-        // 🏷 Categories
-        HomeSectionTitle(title: "Categories"),
-        HomeCategories(),
-        SizedBox(height: 20),
-
-        // 🛍 Popular Products
-        HomeSectionTitle(title: "Popular Products"),
-        HomePopularProducts(),
-      ],
+    return RefreshIndicator(
+      onRefresh: () async {
+        await GlobalRefresh.refresh(context);
+      },
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: const [
+          HomeSearchBar(),
+          SizedBox(height: 20),
+          HomeBannerSlider(),
+          SizedBox(height: 20),
+          HomeSectionTitle(title: "Categories"),
+          HomeCategories(),
+          SizedBox(height: 20),
+          HomeSectionTitle(title: "Popular Products"),
+          HomePopularProducts(),
+        ],
+      ),
     );
   }
 }
+

@@ -1,10 +1,9 @@
-// lib/widgets/top_nav_bar.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_ecom/modules/auth/providers/auth_provider.dart';
 import 'package:flutter_ecom/modules/cart/provider/cart_provider.dart';
-import 'package:flutter_ecom/routers/app_routes.dart';
+import 'package:flutter_ecom/layout/bottom_bar_layout.dart';
 import 'package:flutter_ecom/utils/require_login.dart';
 
 class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
@@ -26,7 +25,6 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
-        // COMBINE AUTH + CART PROVIDERS
         Consumer2<AuthProvider, CartProvider>(
           builder: (context, authProvider, cartProvider, child) {
             final isLoggedIn = authProvider.isAuthenticated;
@@ -35,30 +33,34 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
             return IconButton(
               onPressed: () async {
                 if (!isLoggedIn) {
-                  // Show login dialog for non-authenticated users
                   return requireLogin(
                     context,
                         () async {
-                      // After successful login, load cart and navigate
                       await cartProvider.loadCart();
-                      if (Navigator.of(context).canPop()) {
-                        Navigator.of(context).pop();
-                      }
-                      Navigator.pushNamed(context, AppRoutes.cart);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                          const BottomBarLayout(initialIndex: 3),
+                        ),
+                      );
                     },
                   );
-                } else {
-                  // User is logged in - refresh cart and navigate
-                  await cartProvider.loadCart();
-                  Navigator.pushNamed(context, AppRoutes.cart);
                 }
+
+                await cartProvider.loadCart();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const BottomBarLayout(initialIndex: 3),
+                  ),
+                );
               },
               icon: Stack(
                 clipBehavior: Clip.none,
                 children: [
                   const Icon(Icons.shopping_cart, color: Colors.white),
 
-                  // ONLY SHOW BADGE WHEN LOGGED IN AND HAS ITEMS
                   if (isLoggedIn && badgeCount > 0)
                     Positioned(
                       right: -8,

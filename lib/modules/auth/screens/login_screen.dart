@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/layout/bottom_bar_layout.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -206,7 +207,12 @@ class _LoginScreenState extends State<LoginScreen> {
       print("=================================");
 
       await _debugTokens();
-      Navigator.pushReplacementNamed(context, AppRoutes.main);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const BottomBarLayout(initialIndex: 0),
+        ),
+      );
     } else {
       print("====== LOGIN FAILED ======");
       print("Error: ${auth.error}");

@@ -8,19 +8,18 @@ import '../modules/cart/screens/cart_screen.dart';
 import '../modules/profile/screens/profile_screen.dart';
 
 class BottomBarLayout extends StatefulWidget {
-  static int currentIndex = 0;
+  final int initialIndex;
 
-  /// 🔥 Expose function to change tab globally
-  static void Function(int index)? changeTab;
-
-  const BottomBarLayout({super.key});
+  const BottomBarLayout({super.key, this.initialIndex = 0});
 
   @override
   State<BottomBarLayout> createState() => _BottomBarLayoutState();
 }
 
 class _BottomBarLayoutState extends State<BottomBarLayout> {
-  static final screens = const [
+  late int _currentIndex;
+
+  final List<Widget> screens = const [
     HomeScreen(),
     CategoryScreen(),
     WishlistScreen(),
@@ -31,26 +30,23 @@ class _BottomBarLayoutState extends State<BottomBarLayout> {
   @override
   void initState() {
     super.initState();
-
-    /// Register global tab function
-    BottomBarLayout.changeTab = (int index) {
-      setState(() {
-        BottomBarLayout.currentIndex = index;
-      });
-    };
+    _currentIndex = widget.initialIndex;
   }
 
-  @override
-  void dispose() {
-    /// Clean up static
-    BottomBarLayout.changeTab = null;
-    super.dispose();
+  void _changeTab(int index) {
+    if (index == _currentIndex) return;
+    setState(() => _currentIndex = index);
   }
 
   @override
   Widget build(BuildContext context) {
     return MainLayout(
-      child: screens[BottomBarLayout.currentIndex],
+      currentIndex: _currentIndex,
+      onTabChange: _changeTab,
+      child: IndexedStack(
+        index: _currentIndex,
+        children: screens,
+      ),
     );
   }
 }

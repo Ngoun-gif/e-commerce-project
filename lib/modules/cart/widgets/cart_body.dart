@@ -69,11 +69,6 @@ class CartBody extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              isAuthError ? Icons.login_rounded : Icons.error_outline_rounded,
-              size: 80,
-              color: isAuthError ? Colors.orange.shade400 : Colors.red.shade400,
-            ),
             const SizedBox(height: 24),
             Text(
               isAuthError ? "Authentication Required" : "Oops! Something went wrong",

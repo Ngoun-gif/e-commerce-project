@@ -65,14 +65,27 @@ class AuthProvider extends ChangeNotifier {
     _finish();
   }
 
-  Future<void> register(String fullName, String email, String password) async {
+  // In your AuthProvider class, update the register method:
+
+  Future<void> register(
+      String firstname,
+      String lastname,
+      String username,
+      String email,
+      String phone,
+      String password,
+      ) async {
     _start();
     try {
       final req = RegisterRequest(
-        fullName: fullName,
         email: email,
         password: password,
+        username: username,
+        firstname: firstname,
+        lastname: lastname,
+        phone: phone,
       );
+
       final AuthResponse res = await AuthService.register(req);
       _accessToken = res.accessToken;
 
@@ -85,11 +98,20 @@ class AuthProvider extends ChangeNotifier {
       } catch (e) {
         print("⚠️ AuthProvider.register() - UserService error: $e");
         print("🔄 AuthProvider.register() - Falling back to AuthResponse user data");
-        _user = res.user; // Use the user from AuthResponse as fallback
+        _user = res.user;
       }
     } catch (e) {
       print("❌ AuthProvider.register() - Error: $e");
       _error = e.toString();
+
+      // More specific error handling
+      if (e.toString().contains("email") || e.toString().contains("Email")) {
+        _error = "Email already exists or is invalid";
+      } else if (e.toString().contains("username") || e.toString().contains("Username")) {
+        _error = "Username already exists";
+      } else {
+        _error = "Registration failed. Please try again.";
+      }
     }
     _finish();
   }

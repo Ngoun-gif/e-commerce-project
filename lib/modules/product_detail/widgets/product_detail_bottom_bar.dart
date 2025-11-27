@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/layout/bottom_bar_layout.dart';
 import 'package:provider/provider.dart';
 
 import '../../home/models/product.dart';
@@ -171,7 +172,13 @@ class ProductDetailBottomBar extends StatelessWidget {
             if (qty == 0) {
               _addToCart(context);
             } else {
-              Navigator.pushNamed(context, AppRoutes.cart);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const BottomBarLayout(initialIndex: 3),
+                ),
+              );
+
             }
           },
           style: ElevatedButton.styleFrom(

@@ -29,13 +29,6 @@ class _CartScreenState extends State<CartScreen> {
       appBar: AppBar(
         title: const Text("My Cart"),
         actions: [
-          if (!provider.isEmpty)
-            IconButton(
-              icon: const Icon(Icons.delete_outline),
-              onPressed: provider.isCartLoading || provider.isMutating
-                  ? null
-                  : () => _showClearCartDialog(context),
-            ),
         ],
       ),
 
