@@ -7,7 +7,6 @@ import '../providers/wishlist_provider.dart';
 import '../widgets/wishlist_empty_view.dart';
 import '../widgets/wishlist_list_view.dart';
 
-
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
 
@@ -16,56 +15,41 @@ class WishlistScreen extends StatefulWidget {
 }
 
 class _WishlistScreenState extends State<WishlistScreen> {
-  bool _initialized = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeWishlist();
-  }
-
-  void _initializeWishlist() {
-    Future.microtask(() {
-      final authProvider = context.read<AuthProvider>();
-      final wishlistProvider = context.read<WishlistProvider>();
-
-      // Sync authentication state with wishlist provider
-      wishlistProvider.setAuthenticated(authProvider.isAuthenticated, notify: false);
-
-      // Load wishlist only if authenticated
-      if (authProvider.isAuthenticated) {
-        wishlistProvider.loadWishlist();
-      }
-    });
-  }
+  bool _initialLoad = true;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_initialized) {
-      _initialized = true;
-      _syncAuthState();
+
+    // Sync auth state and load wishlist on first build
+    if (_initialLoad) {
+      _initialLoad = false;
+      _syncAuthAndLoadWishlist();
     }
   }
 
-  void _syncAuthState() {
-    Future.microtask(() {
-      final authProvider = context.read<AuthProvider>();
-      final wishlistProvider = context.read<WishlistProvider>();
+  void _syncAuthAndLoadWishlist() {
+    final authProvider = context.read<AuthProvider>();
+    final wishlistProvider = context.read<WishlistProvider>();
 
-      if (wishlistProvider.isAuthenticated != authProvider.isAuthenticated) {
-        wishlistProvider.setAuthenticated(authProvider.isAuthenticated, notify: false);
-        if (authProvider.isAuthenticated) {
-          wishlistProvider.loadWishlist();
-        }
-      }
-    });
+    print("🔄 WishlistScreen - Syncing auth state: ${authProvider.isAuthenticated}");
+
+    // Update wishlist provider with current auth state
+    wishlistProvider.updateAuthState(authProvider.isAuthenticated);
   }
 
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
     final wishlistProvider = context.watch<WishlistProvider>();
+
+    // Sync auth state whenever it changes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (wishlistProvider.isAuthenticated != authProvider.isAuthenticated) {
+        print("🔄 WishlistScreen - Auth state changed, resyncing...");
+        wishlistProvider.updateAuthState(authProvider.isAuthenticated);
+      }
+    });
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -74,32 +58,62 @@ class _WishlistScreenState extends State<WishlistScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         foregroundColor: Colors.black,
+        actions: [
+          if (authProvider.isAuthenticated && wishlistProvider.items.isNotEmpty)
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () {
+                wishlistProvider.loadWishlist();
+              },
+              tooltip: 'Refresh wishlist',
+            ),
+        ],
       ),
       body: _buildBody(authProvider, wishlistProvider),
     );
   }
 
   Widget _buildBody(AuthProvider authProvider, WishlistProvider wishlistProvider) {
+    print("🎯 WishlistScreen - Building body. Auth: ${authProvider.isAuthenticated}, Loading: ${wishlistProvider.loading}, Items: ${wishlistProvider.items.length}");
+
     // Show login prompt if not authenticated
     if (!authProvider.isAuthenticated) {
+      print("🚫 WishlistScreen - User not authenticated, showing login prompt");
       return _buildLoginPrompt();
     }
 
-    // Show loading state
-    if (wishlistProvider.loading) {
-      return const Center(child: CircularProgressIndicator());
+    // Show loading state (only on initial load when items are empty)
+    if (wishlistProvider.loading && wishlistProvider.items.isEmpty) {
+      print("⏳ WishlistScreen - Showing loading indicator");
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
     }
 
     // Show error state
-    if (wishlistProvider.error != null) {
+    if (wishlistProvider.error != null && wishlistProvider.items.isEmpty) {
+      print("❌ WishlistScreen - Showing error: ${wishlistProvider.error}");
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(wishlistProvider.error!),
+            Icon(
+              Icons.error_outline,
+              size: 64,
+              color: Colors.red.shade300,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              wishlistProvider.error!,
+              style: const TextStyle(fontSize: 16, color: Colors.red),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => wishlistProvider.loadWishlist(),
+              onPressed: () {
+                print("🔄 WishlistScreen - Retry loading wishlist");
+                wishlistProvider.loadWishlist();
+              },
               child: const Text('Retry'),
             ),
           ],
@@ -108,9 +122,13 @@ class _WishlistScreenState extends State<WishlistScreen> {
     }
 
     // Show empty state or wishlist content
-    return wishlistProvider.items.isEmpty
-        ? const WishlistEmptyView()
-        : const WishlistListView();
+    if (wishlistProvider.items.isEmpty) {
+      print("📭 WishlistScreen - Showing empty view");
+      return const WishlistEmptyView();
+    } else {
+      print("📦 WishlistScreen - Showing ${wishlistProvider.items.length} items");
+      return const WishlistListView();
+    }
   }
 
   Widget _buildLoginPrompt() {

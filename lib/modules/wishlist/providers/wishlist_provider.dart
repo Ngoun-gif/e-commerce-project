@@ -17,24 +17,34 @@ class WishlistProvider extends ChangeNotifier {
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
 
+  bool _initialized = false;
+
   // =============================
-  // Authentication Methods
+  // Enhanced Authentication Sync
   // =============================
 
-  /// Set authentication status and handle wishlist accordingly
-  void setAuthenticated(bool authenticated, {bool notify = true}) {
-    if (_isAuthenticated != authenticated) {
+  /// Update authentication state and handle wishlist accordingly
+  void updateAuthState(bool authenticated) {
+    print("🔄 WishlistProvider.updateAuthState() - Authenticated: $authenticated");
+
+    if (_isAuthenticated != authenticated || !_initialized) {
       _isAuthenticated = authenticated;
-      if (!authenticated) {
+      _initialized = true;
+
+      if (authenticated) {
+        // User logged in - load wishlist
+        print("🔃 WishlistProvider - Loading wishlist for authenticated user");
+        loadWishlist();
+      } else {
+        // User logged out - clear wishlist
+        print("🧹 WishlistProvider - Clearing wishlist for logged out user");
         _clearWishlist(notify: false);
       }
-      if (notify) {
-        notifyListeners();
-      }
+      notifyListeners();
     }
   }
 
-  /// Clear wishlist data (used when logging out)
+  /// Clear wishlist data
   void clearWishlist() {
     _clearWishlist();
   }
@@ -54,10 +64,12 @@ class WishlistProvider extends ChangeNotifier {
   Future<void> loadWishlist() async {
     // Don't load if not authenticated
     if (!_isAuthenticated) {
+      print("🚫 WishlistProvider.loadWishlist() - Not authenticated, skipping");
       _clearWishlist(notify: false);
       return;
     }
 
+    print("📥 WishlistProvider.loadWishlist() - Fetching wishlist...");
     _loading = true;
     _error = null;
     notifyListeners();
@@ -65,9 +77,12 @@ class WishlistProvider extends ChangeNotifier {
     try {
       final fetchedItems = await _service.fetchWishlist();
       _items = fetchedItems;
+      _error = null;
+      print("✅ WishlistProvider.loadWishlist() - Loaded ${_items.length} items");
     } catch (e) {
-      _error = "Failed to load wishlist";
-      _items = []; // Clear items on error
+      _error = "Failed to load wishlist: ${e.toString()}";
+      _items = [];
+      print("❌ WishlistProvider.loadWishlist() - Error: $e");
     } finally {
       _loading = false;
       notifyListeners();
@@ -96,6 +111,7 @@ class WishlistProvider extends ChangeNotifier {
     }
 
     final exists = isFavorite(productId);
+    print("🔄 WishlistProvider.toggle() - Product: $productId, Exists: $exists");
 
     // Optimistic UI update
     if (exists) {
@@ -114,15 +130,17 @@ class WishlistProvider extends ChangeNotifier {
     try {
       if (exists) {
         await _service.removeWishlist(productId);
+        print("🗑️ WishlistProvider.toggle() - Removed product $productId");
       } else {
         await _service.addWishlist(productId);
+        print("❤️ WishlistProvider.toggle() - Added product $productId");
       }
       // Reload to ensure sync with server
       await loadWishlist();
     } catch (e) {
       // Rollback on error
       await loadWishlist();
-      _error = "Failed to update wishlist";
+      _error = "Failed to update wishlist: ${e.toString()}";
       notifyListeners();
     }
   }
@@ -131,47 +149,35 @@ class WishlistProvider extends ChangeNotifier {
   // Remove with Auth Check
   // =============================
   Future<void> remove(int id) async {
-    // Don't allow modifications if not authenticated
     if (!_isAuthenticated) {
       _error = "Please login to modify wishlist";
       notifyListeners();
       return;
     }
 
-    // Optimistic UI update
+    print("🗑️ WishlistProvider.remove() - Removing product $id");
     _items.removeWhere((e) => e.productId == id);
     notifyListeners();
 
     try {
       await _service.removeWishlist(id);
-      // Reload to ensure sync with server
       await loadWishlist();
     } catch (e) {
-      // Rollback on error
       await loadWishlist();
-      _error = "Failed to remove item from wishlist";
+      _error = "Failed to remove item from wishlist: ${e.toString()}";
       notifyListeners();
     }
   }
 
-  // =============================
-  // Error Handling
-  // =============================
   void clearError() {
     _error = null;
     notifyListeners();
   }
 
-  // =============================
-  // Check if wishlist is empty (including auth state)
-  // =============================
   bool get isEmpty {
     return !_isAuthenticated || _items.isEmpty;
   }
 
-  // =============================
-  // Get wishlist count (returns 0 if not authenticated)
-  // =============================
   int get itemCount {
     return _isAuthenticated ? _items.length : 0;
   }

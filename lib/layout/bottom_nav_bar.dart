@@ -20,9 +20,19 @@ class BottomNavBar extends StatelessWidget {
     return Consumer3<AuthProvider, CartProvider, WishlistProvider>(
       builder: (context, authProvider, cartProvider, wishlistProvider, child) {
 
+        // Ensure wishlist provider is synced with auth state
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (wishlistProvider.isAuthenticated != authProvider.isAuthenticated) {
+            print("🔄 BottomNavBar - Syncing wishlist auth state");
+            wishlistProvider.updateAuthState(authProvider.isAuthenticated);
+          }
+        });
+
         final isLoggedIn = authProvider.isAuthenticated;
         final cartBadgeCount = isLoggedIn ? cartProvider.badgeCount : 0;
         final wishlistBadgeCount = isLoggedIn ? wishlistProvider.itemCount : 0;
+
+        print("📊 BottomNavBar - Auth: $isLoggedIn, Wishlist: $wishlistBadgeCount, Cart: $cartBadgeCount");
 
         return BottomNavigationBar(
           currentIndex: currentIndex,
@@ -70,8 +80,7 @@ class BottomNavBar extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               decoration: BoxDecoration(
                 color: color,
-                shape: badgeCount > 99 ? BoxShape.rectangle : BoxShape.circle,
-                borderRadius: badgeCount > 99 ? BorderRadius.circular(6) : null,
+                shape: BoxShape.circle,
               ),
               constraints: const BoxConstraints(
                 minWidth: 16,

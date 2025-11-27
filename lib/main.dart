@@ -25,28 +25,49 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // FIX 1: Initialize AuthProvider properly
+        // Auth Provider
         ChangeNotifierProvider<AuthProvider>(
           create: (_) => AuthProvider()..checkAuthStatus(),
         ),
 
-        // FIX 2: Initialize CategoriesProvider properly
+        // Categories Provider
         ChangeNotifierProvider<CategoriesProvider>(
           create: (_) => CategoriesProvider()..loadCategories(),
         ),
 
-        // FIX 3: Initialize ProductProvider properly
+        // Product Provider
         ChangeNotifierProvider<ProductProvider>(
           create: (_) => ProductProvider()..loadProducts(),
         ),
+
+        // User Provider
         ChangeNotifierProvider<UserProvider>(
           create: (_) => UserProvider()..loadUser(),
         ),
 
-        // Other providers without async initialization
+        // Wishlist Provider with Auth dependency
+        ChangeNotifierProxyProvider<AuthProvider, WishlistProvider>(
+          create: (context) => WishlistProvider(),
+          update: (context, authProvider, wishlistProvider) {
+            wishlistProvider ??= WishlistProvider();
+            // Sync auth state whenever AuthProvider changes
+            wishlistProvider.updateAuthState(authProvider.isAuthenticated);
+            return wishlistProvider;
+          },
+        ),
+
+        // Cart Provider with Auth dependency
+        ChangeNotifierProxyProvider<AuthProvider, CartProvider>(
+          create: (context) => CartProvider(),
+          update: (context, authProvider, cartProvider) {
+            cartProvider ??= CartProvider();
+            // If you have auth sync in CartProvider, add it here
+            return cartProvider;
+          },
+        ),
+
+        // Other providers
         ChangeNotifierProvider(create: (_) => ProductDetailProvider()),
-        ChangeNotifierProvider(create: (_) => WishlistProvider()),
-        ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => PaymentHistoryProvider()),
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
