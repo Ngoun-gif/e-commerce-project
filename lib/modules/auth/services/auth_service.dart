@@ -1,3 +1,5 @@
+// lib/modules/auth/services/auth_service.dart
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,38 +15,50 @@ class AuthService {
   // LOGIN
   // ============================================================
   static Future<AuthResponse> login(LoginRequest request) async {
+    print("🔄 AuthService.login() - Starting login for: ${request.email}");
+
     final response = await http.post(
       Uri.parse(ApiConfigAuth.login),
       headers: _jsonHeaders(),
       body: jsonEncode(request.toJson()),
     );
 
+    print("📡 AuthService.login() - Response status: ${response.statusCode}");
+
     if (_success(response.statusCode)) {
-      final auth = AuthResponse.fromJson(jsonDecode(response.body));
+      final responseData = jsonDecode(response.body);
+      final auth = AuthResponse.fromJson(responseData);
       await _saveTokens(auth);
+      print("✅ AuthService.login() - Login successful for: ${auth.user.email}");
       return auth;
     }
 
-    throw Exception("Login failed: ${response.body}");
+    throw Exception("Login failed: ${response.statusCode} ${response.body}");
   }
 
   // ============================================================
   // REGISTER
   // ============================================================
   static Future<AuthResponse> register(RegisterRequest req) async {
+    print("🔄 AuthService.register() - Starting registration for: ${req.email}");
+
     final response = await http.post(
       Uri.parse(ApiConfigAuth.register),
       headers: _jsonHeaders(),
       body: jsonEncode(req.toJson()),
     );
 
+    print("📡 AuthService.register() - Response status: ${response.statusCode}");
+
     if (_success(response.statusCode)) {
-      final auth = AuthResponse.fromJson(jsonDecode(response.body));
+      final responseData = jsonDecode(response.body);
+      final auth = AuthResponse.fromJson(responseData);
       await _saveTokens(auth);
+      print("✅ AuthService.register() - Registration successful for: ${auth.user.email}");
       return auth;
     }
 
-    throw Exception("Register failed: ${response.body}");
+    throw Exception("Register failed: ${response.statusCode} ${response.body}");
   }
 
   // ============================================================
@@ -59,6 +73,7 @@ class AuthService {
       "userName",
       "${auth.user.firstname} ${auth.user.lastname}",
     );
+    print("💾 AuthService._saveTokens() - Tokens saved for: ${auth.user.email}");
   }
 
   // ============================================================
@@ -66,13 +81,9 @@ class AuthService {
   // ============================================================
   static Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("accessToken");
-  }
-
-  // OPTIONAL: private helper
-  static Future<String?> _getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("accessToken");
+    final token = prefs.getString("accessToken");
+    print("🔐 AuthService.getToken() - Token: ${token != null ? 'Available' : 'NULL'}");
+    return token;
   }
 
   // ============================================================
@@ -81,6 +92,7 @@ class AuthService {
   static Future<void> clearTokens() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    print("🧹 AuthService.clearTokens() - All tokens cleared");
   }
 
   // ============================================================

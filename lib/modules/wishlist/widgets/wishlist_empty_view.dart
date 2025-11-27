@@ -89,27 +89,6 @@ class WishlistEmptyView extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Sample Wishlist Items (for empty state inspiration)
-            _buildSampleItem(
-              "Beosound A1",
-              "Reviews (★ 4.8)",
-              "\$650",
-            ),
-            _buildSampleItem(
-              "Beoplay H9",
-              "Reviews (★ 4.9)",
-              "\$750",
-            ),
-            _buildSampleItem(
-              "Beosound EX",
-              "Reviews (★ 4.9)",
-              "\$629",
-            ),
-            _buildSampleItem(
-              "WH-XB900N",
-              "Reviews (★ 4.7)",
-              "\$564",
-            ),
           ],
         ),
       ),

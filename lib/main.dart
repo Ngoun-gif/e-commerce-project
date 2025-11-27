@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecom/modules/checkout/provider/checkout_provider.dart';
 import 'package:flutter_ecom/modules/payment/provider/payment_provider.dart';
 import 'package:flutter_ecom/modules/payment_history/provider/payment_history_provider.dart';
+import 'package:flutter_ecom/modules/user/providers/user_provider.dart';
 import 'package:flutter_ecom/modules/wishlist/providers/wishlist_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +38,9 @@ class App extends StatelessWidget {
         // FIX 3: Initialize ProductProvider properly
         ChangeNotifierProvider<ProductProvider>(
           create: (_) => ProductProvider()..loadProducts(),
+        ),
+        ChangeNotifierProvider<UserProvider>(
+          create: (_) => UserProvider()..loadUser(),
         ),
 
         // Other providers without async initialization
