@@ -14,25 +14,70 @@ class WishlistListView extends StatelessWidget {
 
     return Column(
       children: [
-        // Header with item count
+        // Enhanced Header
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          color: Colors.grey.shade50,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.grey.shade200,
+                width: 1,
+              ),
+            ),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "My Wishlist (${provider.items.length} items)",
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "My Wishlist",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "${provider.items.length} ${provider.items.length == 1 ? 'item' : 'items'} saved",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
               ),
               if (provider.loading)
-                const SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        height: 12,
+                        width: 12,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        "Updating...",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
             ],
           ),
@@ -43,14 +88,23 @@ class WishlistListView extends StatelessWidget {
           child: RefreshIndicator(
             onRefresh: () => provider.loadWishlist(),
             color: AppColors.primary,
-            child: ListView.builder(
+            backgroundColor: Colors.white,
+            displacement: 40,
+            child: provider.items.isEmpty
+                ? const Center(
+              child: Text(
+                "No items in wishlist",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
+              ),
+            )
+                : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: provider.items.length,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: WishlistItemCard(item: provider.items[index]),
-                );
+                return WishlistItemCard(item: provider.items[index]);
               },
             ),
           ),
