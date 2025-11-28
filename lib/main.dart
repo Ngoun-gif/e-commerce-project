@@ -65,11 +65,20 @@ class App extends StatelessWidget {
             return cartProvider;
           },
         ),
+        // Payment History Provider with Auth dependency
+        ChangeNotifierProxyProvider<AuthProvider, PaymentHistoryProvider>(
+          create: (context) => PaymentHistoryProvider(),
+          update: (context, authProvider, paymentHistoryProvider) {
+            paymentHistoryProvider ??= PaymentHistoryProvider();
+            // Sync auth state whenever AuthProvider changes
+            paymentHistoryProvider.updateAuthState(authProvider.isAuthenticated);
+            return paymentHistoryProvider;
+          },
+        ),
 
         // Other providers
         ChangeNotifierProvider(create: (_) => ProductDetailProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
-        ChangeNotifierProvider(create: (_) => PaymentHistoryProvider()),
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
       ],
       child: MaterialApp(

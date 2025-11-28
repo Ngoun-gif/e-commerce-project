@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecom/modules/payment/screens/payment_screen.dart';
 import 'package:flutter_ecom/modules/payment/screens/success_payment_screen.dart';
+import 'package:flutter_ecom/modules/profile/screens/profile_screen.dart';
+import 'package:flutter_ecom/modules/wishlist/screens/wishlist_screen.dart';
 
 
 import '../modules/splash/screens/splash_screen.dart';
@@ -22,7 +24,8 @@ class AppRoutes {
   static const String checkout = "/checkout";
   static const String payment = "/payment";
   static const String successPayment = "/payment-success";
-
+  static const String profile = "/profile";
+  static const String wishlist = "/wishlist";
 
   static Map<String, WidgetBuilder> routes = {
     splash: (_) => const SplashScreen(),
@@ -31,6 +34,8 @@ class AppRoutes {
     register: (_) => const RegisterScreen(),
     cart: (_) => const CartScreen(),
     checkout: (_) => const CheckoutScreen(),
+    profile: (_) => const ProfileScreen(),
+    wishlist: (_) => const WishlistScreen(),
 
 
     productDetail: (context) {

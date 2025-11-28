@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ecom/modules/wishlist/providers/wishlist_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_ecom/theme/app_colors.dart';
-import 'package:flutter_ecom/modules/payment_history/provider/payment_history_provider.dart';
 import 'package:flutter_ecom/modules/cart/provider/cart_provider.dart';
-
+import 'package:flutter_ecom/modules/payment_history/provider/payment_history_provider.dart';
+import 'package:flutter_ecom/modules/wishlist/providers/wishlist_provider.dart';
+import 'package:flutter_ecom/theme/app_colors.dart';
+import 'package:provider/provider.dart';
 
 class StatsRow extends StatelessWidget {
   final bool showLoading;
@@ -28,12 +27,13 @@ class StatsRow extends StatelessWidget {
 
     return Row(
       children: [
+        // PAYMENTS
         Expanded(
           child: GestureDetector(
             onTap: onPaymentTap,
             child: _buildStatItem(
               context: context,
-              value: paymentProvider.totalPayments.toString(),
+              value: paymentProvider.count.toString(),
               label: "Payments",
               icon: Icons.payment_outlined,
               loading: showLoading && paymentProvider.loading,
@@ -42,13 +42,15 @@ class StatsRow extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
+
+        // CART
         Expanded(
           child: GestureDetector(
             onTap: onCartTap,
             child: _buildStatItem(
               context: context,
               value: cartProvider.badgeCount.toString(),
-              label: "Carts",
+              label: "Cart Items",
               icon: Icons.shopping_cart_outlined,
               loading: showLoading && cartProvider.isCartLoading,
 
@@ -56,6 +58,8 @@ class StatsRow extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
+
+        // WISHLIST
         Expanded(
           child: GestureDetector(
             onTap: onWishlistTap,
@@ -65,7 +69,7 @@ class StatsRow extends StatelessWidget {
               label: "Wishlist",
               icon: Icons.favorite_outline,
               loading: showLoading && wishlistProvider.loading,
-              subtitle: wishlistProvider.isAuthenticated ? "" : "Login required",
+
             ),
           ),
         ),
@@ -74,13 +78,27 @@ class StatsRow extends StatelessWidget {
   }
 
   String _getPaymentSubtitle(PaymentHistoryProvider provider) {
-    if (provider.successfulPayments.isNotEmpty) {
-      return "${provider.successfulPayments.length} successful";
-    }
-    return "";
+    if (!provider.isAuthenticated) return "Login required";
+    if (provider.loading) return "Loading...";
+    if (provider.count > 0) return "${provider.count} total";
+    return "No payments";
   }
 
+  String _getCartSubtitle(CartProvider provider) {
+    if (provider.isCartLoading) return "Loading...";
+    if (provider.cart != null && provider.cart!.items.isNotEmpty) {
+      final totalItems = provider.cart!.items.length;
+      return "$totalItems products";
+    }
+    return "Empty";
+  }
 
+  String _getWishlistSubtitle(WishlistProvider provider) {
+    if (!provider.isAuthenticated) return "Login required";
+    if (provider.loading) return "Loading...";
+    if (provider.itemCount > 0) return "${provider.itemCount} items";
+    return "Empty";
+  }
 
   Widget _buildStatItem({
     required BuildContext context,
