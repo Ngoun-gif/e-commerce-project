@@ -1,16 +1,44 @@
 // lib/modules/payment/screens/success_payment_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/modules/payment_history/provider/payment_history_provider.dart';
 import 'package:provider/provider.dart';
 import '../provider/payment_provider.dart';
 import '../../../routers/app_routes.dart';
 
-class SuccessPaymentScreen extends StatelessWidget {
+class SuccessPaymentScreen extends StatefulWidget {
   const SuccessPaymentScreen({super.key});
+
+  @override
+  State<SuccessPaymentScreen> createState() => _SuccessPaymentScreenState();
+}
+
+class _SuccessPaymentScreenState extends State<SuccessPaymentScreen> {
+  bool _refreshed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshPaymentHistory();
+  }
+
+  Future<void> _refreshPaymentHistory() async {
+    if (_refreshed) return;
+
+    try {
+      final paymentHistoryProvider = context.read<PaymentHistoryProvider>();
+      await paymentHistoryProvider.refreshCount();
+      _refreshed = true;
+      print("🎯 SuccessPaymentScreen - Payment history refreshed automatically");
+    } catch (e) {
+      print("❌ SuccessPaymentScreen - Failed to refresh payment history: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final payment = context.watch<PaymentProvider>().lastPayment;
+    final paymentHistoryProvider = context.watch<PaymentHistoryProvider>();
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -101,6 +129,15 @@ class SuccessPaymentScreen extends StatelessWidget {
                       color: Colors.grey.shade600,
                     ),
                     textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Total Payments: ${paymentHistoryProvider.count}",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.green.shade700,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),

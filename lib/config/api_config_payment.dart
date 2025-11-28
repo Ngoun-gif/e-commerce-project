@@ -1,7 +1,7 @@
 class ApiConfigPayment {
   // ================== HOST ==================
   /// Laptop IP for physical Android device (same WiFi / LAN)
-  static const String laptopIp = "192.168.0.90:8081";
+  static const String laptopIp = "192.168.1.7:8081";
 
   /// Phone hotspot IP (when backend runs from phone network or LAN)
   static const String phone = "192.168.0.90:8081";

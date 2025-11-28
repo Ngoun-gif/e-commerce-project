@@ -59,6 +59,73 @@ class PaymentHistoryProvider extends ChangeNotifier {
     }
   }
 
+  // ==================== REAL-TIME REFRESH METHODS ====================
+
+  /// Force immediate refresh with loading state
+  Future<void> refreshImmediately() async {
+    if (!_isAuthenticated) return;
+
+    try {
+      print("🔄 PaymentHistoryProvider.refreshImmediately() - Force refreshing payments");
+      _loading = true;
+      notifyListeners(); // Immediate UI update
+
+      final paymentList = await PaymentHistoryService.getAllPayments();
+      _payments = paymentList;
+      _loading = false;
+
+      print("✅ PaymentHistoryProvider.refreshImmediately() - Now have ${_payments.length} payments");
+      notifyListeners();
+    } catch (e) {
+      _loading = false;
+      _error = e.toString();
+      print("❌ PaymentHistoryProvider.refreshImmediately() failed: $e");
+      notifyListeners();
+    }
+  }
+
+  /// Silent background refresh without loading state
+  Future<void> refreshSilently() async {
+    if (!_isAuthenticated) return;
+
+    try {
+      print("🔄 PaymentHistoryProvider.refreshSilently() - Background refresh");
+      final paymentList = await PaymentHistoryService.getAllPayments();
+
+      // Only update if count changed to avoid unnecessary rebuilds
+      if (paymentList.length != _payments.length) {
+        _payments = paymentList;
+        print("✅ PaymentHistoryProvider.refreshSilently() - Count updated to ${_payments.length}");
+        notifyListeners();
+      } else {
+        print("🔵 PaymentHistoryProvider.refreshSilently() - No changes detected");
+      }
+    } catch (e) {
+      print("❌ PaymentHistoryProvider.refreshSilently() failed: $e");
+    }
+  }
+
+  /// Quick refresh for count only (optimized)
+  Future<void> refreshCount() async {
+    if (!_isAuthenticated) return;
+
+    try {
+      print("🔄 PaymentHistoryProvider.refreshCount() - Quick count refresh");
+      final previousCount = _payments.length;
+      final paymentList = await PaymentHistoryService.getAllPayments();
+      _payments = paymentList;
+
+      if (_payments.length != previousCount) {
+        print("✅ PaymentHistoryProvider.refreshCount() - Count changed: $previousCount → ${_payments.length}");
+        notifyListeners();
+      } else {
+        print("🔵 PaymentHistoryProvider.refreshCount() - Count unchanged: $previousCount");
+      }
+    } catch (e) {
+      print("❌ PaymentHistoryProvider.refreshCount() failed: $e");
+    }
+  }
+
   // ==================== FETCH ALL PAYMENTS ====================
   Future<void> fetchAllPayments() async {
     if (!_isAuthenticated) {
