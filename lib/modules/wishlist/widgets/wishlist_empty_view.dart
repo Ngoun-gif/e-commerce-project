@@ -10,76 +10,48 @@ class WishlistEmptyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           children: [
-            const SizedBox(height: 40),
-
-            // Animated Heart Icon
-            Container(
-              width: 140,
-              height: 140,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Colors.red.shade100,
-                    Colors.pink.shade100,
-                  ],
-                ),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.favorite_outline_rounded,
-                size: 60,
-                color: Colors.red,
-              ),
-            ),
-
-            const SizedBox(height: 32),
+            const SizedBox(height: 60),
 
             // Title
             const Text(
-              "Your Wishlist is Empty",
+              "My Wishlist is Empty!",
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: FontWeight.w700,
                 color: Colors.black87,
               ),
               textAlign: TextAlign.center,
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
 
             // Description
             const Text(
-              "Start building your collection! Tap the heart icon on any product to save it here for later.",
+              "Tap heart button to start saving your favorite items.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
                 fontWeight: FontWeight.w400,
-                height: 1.6,
               ),
             ),
 
-            const SizedBox(height: 48),
+            const SizedBox(height: 40),
 
             // Explore Button
             SizedBox(
               width: double.infinity,
-              height: 56,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColorsPrimary.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  elevation: 2,
-                  shadowColor: AppColors.primary.withOpacity(0.3),
                 ),
                 onPressed: () {
                   Navigator.pushReplacement(
@@ -89,81 +61,111 @@ class WishlistEmptyView extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.explore_outlined, size: 20),
-                    SizedBox(width: 8),
-                    Text(
-                      "Explore Products",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
+                child: const Text(
+                  "Explore",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 40),
 
-            // Browse Categories Button
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.primary,
-                  side: BorderSide(color: AppColors.primary),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const BottomBarLayout(initialIndex: 1),
-                    ),
-                  );
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.category_outlined, size: 20),
-                    SizedBox(width: 8),
-                    Text(
-                      "Browse Categories",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
+            // Big Shopping Cart Icon (Below Explore Button)
+            Container(
+              margin: const EdgeInsets.only(bottom: 40),
+              child: Icon(
+                Icons.shopping_cart_outlined,
+                size: 240,
+                color: Colors.grey.shade300,
               ),
             ),
 
             const SizedBox(height: 60),
-
-            // Decorative Pattern
-            Container(
-              height: 120,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.grey.shade50,
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.heart_broken_rounded,
-                  size: 40,
-                  color: Colors.grey.shade400,
-                ),
-              ),
-            ),
+            const SizedBox(height: 24),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSampleItem(String title, String reviews, String price) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Row(
+        children: [
+          // Product Image Placeholder
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(Icons.photo, color: Colors.grey),
+          ),
+
+          const SizedBox(width: 16),
+
+          // Product Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  reviews,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  price,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppColorsPrimary.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Add to Bag Button
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColorsPrimary.primary,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Text(
+              "Add to Bag",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

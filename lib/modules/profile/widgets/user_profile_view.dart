@@ -40,7 +40,7 @@ class UserProfileView extends StatelessWidget {
                 InfoCard(
                   title: "Personal Information",
                   icon: Icons.person_outline,
-                  iconColor: AppColors.primary,
+                  iconColor: AppColorsPrimary.primary,
                   children: [
                     InfoRow(
                       icon: Icons.email_outlined,

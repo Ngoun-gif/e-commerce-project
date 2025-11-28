@@ -16,8 +16,8 @@ class ProfileHeader extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppColors.primary,
-            AppColors.primary.withOpacity(0.7),
+            AppColorsPrimary.primary,
+            AppColorsPrimary.primary.withOpacity(0.7),
           ],
         ),
       ),

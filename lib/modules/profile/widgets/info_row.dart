@@ -29,7 +29,7 @@ class InfoRow extends StatelessWidget {
           Icon(
             icon,
             size: 20,
-            color: isImportant ? AppColors.primary : Colors.grey[500],
+            color: isImportant ? AppColorsPrimary.primary : Colors.grey[500],
           ),
           const SizedBox(width: 12),
           Expanded(

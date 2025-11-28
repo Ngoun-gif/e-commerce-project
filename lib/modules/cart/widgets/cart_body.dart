@@ -44,7 +44,7 @@ class CartBody extends StatelessWidget {
             height: 40,
             child: CircularProgressIndicator(
               strokeWidth: 3,
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+              valueColor: const AlwaysStoppedAnimation<Color>(AppColorsPrimary.primary),
             ),
           ),
           const SizedBox(height: 16),
@@ -106,7 +106,7 @@ class CartBody extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
+                    backgroundColor: AppColorsPrimary.primary,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -130,7 +130,7 @@ class CartBody extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
+                    backgroundColor: AppColorsPrimary.primary,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -158,13 +158,13 @@ class CartBody extends StatelessWidget {
               width: 140,
               height: 140,
               decoration: BoxDecoration(
-                color: AppColors.primaryLight.withOpacity(0.1),
+                color: AppColorsPrimary.primaryLight.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.shopping_cart_outlined,
                 size: 56,
-                color: AppColors.primary,
+                color: AppColorsPrimary.primary,
               ),
             ),
             const SizedBox(height: 32),
@@ -208,7 +208,7 @@ class CartBody extends StatelessWidget {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColorsPrimary.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -240,7 +240,7 @@ class CartBody extends StatelessWidget {
             children: [
               Icon(
                 Icons.shopping_cart_rounded,
-                color: AppColors.primary,
+                color: AppColorsPrimary.primary,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -261,7 +261,7 @@ class CartBody extends StatelessWidget {
                       height: 16,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: AppColors.primary,
+                        color: AppColorsPrimary.primary,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -282,7 +282,7 @@ class CartBody extends StatelessWidget {
         Expanded(
           child: RefreshIndicator(
             onRefresh: () => provider.loadCart(),
-            color: AppColors.primary,
+            color: AppColorsPrimary.primary,
             backgroundColor: Colors.white,
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 8),

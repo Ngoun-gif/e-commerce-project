@@ -42,20 +42,14 @@ class AppInfoWidget extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            "Developed by Khimhengngoun",
+            "Developed by Khim Heng Ngoun",
             style: TextStyle(
               color: Colors.grey.shade500,
               fontSize: 10,
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            "v1.0.0",
-            style: TextStyle(
-              color: Colors.grey.shade400,
-              fontSize: 9,
-            ),
-          ),
+
         ],
       ),
     );

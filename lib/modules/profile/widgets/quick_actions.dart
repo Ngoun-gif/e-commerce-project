@@ -110,7 +110,7 @@ class QuickActions extends StatelessWidget {
             Icon(
               icon,
               size: 16,
-              color: AppColors.primary,
+              color: AppColorsPrimary.primary,
             ),
             const SizedBox(width: 6),
             Text(

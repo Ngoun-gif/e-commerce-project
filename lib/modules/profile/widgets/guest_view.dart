@@ -69,13 +69,13 @@ class GuestView extends StatelessWidget {
                 Navigator.pushNamed(context, AppRoutes.login);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
+                backgroundColor: AppColorsPrimary.primary,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
                 elevation: 2,
-                shadowColor: AppColors.primary.withOpacity(0.3),
+                shadowColor: AppColorsPrimary.primary.withOpacity(0.3),
               ),
               child: const Text(
                 "Sign In",
@@ -100,7 +100,7 @@ class GuestView extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                side: BorderSide(color: AppColors.primary),
+                side: BorderSide(color: AppColorsPrimary.primary),
                 backgroundColor: isDark ? Colors.grey[800] : Colors.white,
               ),
               child: Text(
@@ -108,7 +108,7 @@ class GuestView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+                  color: AppColorsPrimary.primary,
                 ),
               ),
             ),

@@ -127,7 +127,7 @@ class StatsRow extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: AppColors.primary,
+            color: AppColorsPrimary.primary,
             size: 20,
           ),
           const SizedBox(height: 8),
@@ -137,7 +137,7 @@ class StatsRow extends StatelessWidget {
               height: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                valueColor: AlwaysStoppedAnimation<Color>(AppColorsPrimary.primary),
               ),
             )
           else
