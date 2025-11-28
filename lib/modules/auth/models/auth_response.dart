@@ -12,12 +12,36 @@ class AuthResponse {
   });
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
-    final data = json["data"]; // 👈 your backend wraps data here
+    print("🔍 AuthResponse.fromJson() - JSON keys: ${json.keys}");
+
+    // Handle different response structures
+    final data = json["data"] ?? json; // Some APIs wrap in "data"
+
+    // Handle different token field names
+    final accessToken = data["accessToken"] ?? data["token"] ?? data["access_token"] ?? '';
+    final refreshToken = data["refreshToken"] ?? data["refresh_token"] ?? '';
+
+    // Handle different user field structures
+    dynamic userData = data["user"] ?? data;
+
+    // If userData is not a Map, create an empty map to avoid errors
+    if (userData is! Map<String, dynamic>) {
+      userData = {};
+    }
+
+    print("🔍 AuthResponse.fromJson() - accessToken: $accessToken");
+    print("🔍 AuthResponse.fromJson() - userData type: ${userData.runtimeType}");
 
     return AuthResponse(
-      accessToken: data["accessToken"],
-      refreshToken: data["refreshToken"],
-      user: UserModel.fromJson(data["user"]),
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      user: UserModel.fromJson(userData),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    "accessToken": accessToken,
+    "refreshToken": refreshToken,
+    "user": user.toJson(),
+  };
 }

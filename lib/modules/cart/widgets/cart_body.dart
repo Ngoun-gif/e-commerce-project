@@ -1,6 +1,7 @@
 // lib/modules/cart/widgets/cart_body.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/layout/bottom_bar_layout.dart';
 import 'package:flutter_ecom/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../provider/cart_provider.dart';
@@ -194,8 +195,12 @@ class CartBody extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Navigate to home screen
-                  // Navigator.pushNamed(context, AppRoutes.main);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const BottomBarLayout(initialIndex: 0),
+                    ),
+                  );
                 },
                 icon: const Icon(Icons.shopping_bag_outlined, size: 20),
                 label: const Text(

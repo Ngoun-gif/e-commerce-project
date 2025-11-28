@@ -29,7 +29,7 @@ class DrawerLayout extends StatelessWidget {
                   ListTile(
                     leading: Icon(Icons.payment, color: Color(0xFF0D47A1)),
                     title: Text(
-                      "Payment History",
+                      "Payments History",
                       style: TextStyle(color: Color(0xFF0D47A1)),
                     ),
                     onTap: () {

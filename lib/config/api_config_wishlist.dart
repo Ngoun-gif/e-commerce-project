@@ -1,8 +1,8 @@
 class ApiConfigWishlist {
   // ================== HOST / ENV ==================
-  static const String laptopIp = "192.168.1.5:8081";
-  static const String phone = "10.93.7.44:8081";
-  static const String emulatorHost = "10.0.2.2:8081";
+  static const String laptopIp = "192.168.0.90:8081";
+  static const String phone = "192.168.0.90:8081";
+  static const String emulatorHost = "192.168.0.90:8081";
 
   /// Physical = true / Emulator = false
   static const bool usePhysicalDevice = false;

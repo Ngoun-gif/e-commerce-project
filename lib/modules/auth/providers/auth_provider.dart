@@ -1,6 +1,5 @@
-// lib/modules/auth/providers/auth_provider.dart
-
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/config/api_config_auth.dart';
 
 import '../../user/models/user.dart';
 import '../../user/services/user_service.dart';
@@ -8,8 +7,6 @@ import '../services/auth_service.dart';
 import '../models/login_request.dart';
 import '../models/register_request.dart';
 import '../models/auth_response.dart';
-
-// lib/modules/auth/providers/auth_provider.dart
 
 class AuthProvider extends ChangeNotifier {
   UserModel? _user;
@@ -44,33 +41,59 @@ class AuthProvider extends ChangeNotifier {
       _user = null;
     }
     _finish();
-    notifyListeners(); // Ensure listeners are notified
+    notifyListeners();
   }
 
   Future<void> login(String email, String password) async {
     _start();
     try {
+      // First, debug the API response to see the actual structure
+      print("🔍 Debugging API response structure...");
+      await AuthService.debugApiResponse(
+        ApiConfigAuth.login,
+        {"email": email, "password": password},
+      );
+
       final req = LoginRequest(email: email, password: password);
       final AuthResponse res = await AuthService.login(req);
       _accessToken = res.accessToken;
 
       print("✅ AuthProvider.login() - Login successful, token: ${_accessToken != null ? 'Received' : 'NULL'}");
 
-      // Try to get fresh user data from /users/me
+      // ALWAYS use UserService.getMe() to ensure consistent UserModel
       try {
         _user = await UserService.getMe();
         print("✅ AuthProvider.login() - User data loaded from /users/me");
+        _error = null;
       } catch (e) {
         print("⚠️ AuthProvider.login() - UserService error: $e");
-        print("🔄 AuthProvider.login() - Falling back to AuthResponse user data");
-        _user = res.user;
+        _user = null;
+        _error = "Login successful but failed to load user profile";
       }
     } catch (e) {
       print("❌ AuthProvider.login() - Error: $e");
       _error = e.toString();
+
+      // Provide user-friendly error messages
+      if (e.toString().contains("Invalid email or password")) {
+        _error = "Invalid email or password";
+      } else if (e.toString().contains("Network error")) {
+        _error = "Network error - please check your connection";
+      } else if (e.toString().contains("Access token is missing")) {
+        _error = "Login failed - server response incomplete";
+      } else if (e.toString().contains("timeout")) {
+        _error = "Request timeout - please try again";
+      } else if (e.toString().contains("FormatException")) {
+        _error = "Invalid server response";
+      } else if (e.toString().contains("Null") && e.toString().contains("int")) {
+        _error = "Server response format error - missing user data";
+      }
+
+      _accessToken = null;
+      _user = null;
     }
     _finish();
-    notifyListeners(); // Ensure listeners are notified after login
+    notifyListeners();
   }
 
   Future<void> register(
@@ -97,14 +120,14 @@ class AuthProvider extends ChangeNotifier {
 
       print("✅ AuthProvider.register() - Registration successful, token: ${_accessToken != null ? 'Received' : 'NULL'}");
 
-      // Try to get fresh user data from /users/me
+      // ALWAYS use UserService.getMe() to ensure consistent UserModel
       try {
         _user = await UserService.getMe();
         print("✅ AuthProvider.register() - User data loaded from /users/me");
       } catch (e) {
         print("⚠️ AuthProvider.register() - UserService error: $e");
-        print("🔄 AuthProvider.register() - Falling back to AuthResponse user data");
-        _user = res.user;
+        // If UserService fails, we'll still have the token but no user data
+        _user = null;
       }
     } catch (e) {
       print("❌ AuthProvider.register() - Error: $e");
@@ -119,7 +142,7 @@ class AuthProvider extends ChangeNotifier {
       }
     }
     _finish();
-    notifyListeners(); // Ensure listeners are notified after register
+    notifyListeners();
   }
 
   Future<void> logout() async {
@@ -128,7 +151,7 @@ class AuthProvider extends ChangeNotifier {
     _user = null;
     _accessToken = null;
     _error = null;
-    notifyListeners(); // This is crucial for other providers to react
+    notifyListeners();
   }
 
   void clearError() {
