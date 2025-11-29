@@ -75,7 +75,7 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
                           minHeight: 16,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: Colors.red.shade600.withOpacity(1.0),
                           shape: badgeCount > 99
                               ? BoxShape.rectangle
                               : BoxShape.circle,

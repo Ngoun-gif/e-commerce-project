@@ -88,10 +88,6 @@ class UserProfileView extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Quick Actions
-                const QuickActions(),
-                const SizedBox(height: 32),
-
                 // Logout Button
                 LogoutButton(onLogout: () => auth.logout()),
                 const SizedBox(height: 20),

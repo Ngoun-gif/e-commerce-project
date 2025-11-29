@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,7 @@ class BottomNavBar extends StatelessWidget {
               label: "Home",
             ),
             const BottomNavigationBarItem(
-              icon: Icon(Icons.category_outlined),
+              icon: Icon(CupertinoIcons.square_grid_2x2),
               label: "Category",
             ),
             BottomNavigationBarItem(

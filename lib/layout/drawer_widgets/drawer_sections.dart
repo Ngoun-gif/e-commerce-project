@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/layout/bottom_bar_layout.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_ecom/modules/payment_history/screens/payment_history_screen.dart';
 import 'package:flutter_ecom/modules/auth/providers/auth_provider.dart';
@@ -137,7 +138,12 @@ class DrawerSections extends StatelessWidget {
           title: "Home",
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushReplacementNamed(context, AppRoutes.main);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const BottomBarLayout(initialIndex: 0),
+              ),
+            );
           },
         ),
 
@@ -149,7 +155,12 @@ class DrawerSections extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
             if (isLoggedIn) {
-              Navigator.pushNamed(context, AppRoutes.cart);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const BottomBarLayout(initialIndex: 3),
+                ),
+              );
             } else {
               Navigator.pushNamed(context, AppRoutes.login);
             }
@@ -164,7 +175,12 @@ class DrawerSections extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
             if (isLoggedIn) {
-              Navigator.pushNamed(context, AppRoutes.wishlist);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const BottomBarLayout(initialIndex: 2),
+                ),
+              );
             } else {
               Navigator.pushNamed(context, AppRoutes.login);
             }
@@ -200,7 +216,12 @@ class DrawerSections extends StatelessWidget {
             title: "My Profile",
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, AppRoutes.profile);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const BottomBarLayout(initialIndex: 4),
+                ),
+              );
             },
           ),
         ],
