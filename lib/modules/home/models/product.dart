@@ -7,7 +7,7 @@ class ProductModel {
   final String description;
   final String category;
   final String image;
-  final double? rating;
+
   final bool outOfStock;
   final int stockQuantity;
 
@@ -18,7 +18,7 @@ class ProductModel {
     required this.description,
     required this.category,
     required this.image,
-    this.rating,
+
     required this.outOfStock,
     required this.stockQuantity,
   });

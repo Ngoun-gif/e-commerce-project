@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecom/modules/home/models/product.dart';
 import 'package:flutter_ecom/modules/home/widgets/product_card_widgets/product_card_details_section.dart';
-import 'package:flutter_ecom/modules/home/widgets/product_card_widgets/product_card_image_section.dart';
-
-import '../../../routers/app_routes.dart';
-
-
+import 'package:flutter_ecom/modules/home/widgets/product_card_widgets/product_card_image_section.dart'; // ADD THIS IMPORT
+import '../../../../routers/app_routes.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -39,10 +36,7 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image Section
             ProductCardImageSection(product: product),
-
-            // Product Details Section
             Expanded(
               child: ProductCardDetailsSection(product: product),
             ),

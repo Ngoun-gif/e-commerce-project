@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/modules/home/providers/product_provider.dart';
 import 'package:provider/provider.dart';
-import '../providers/product_provider.dart';
-import '../widgets/product_card.dart';
+import 'product_card_widgets/product_card.dart';
 
 class HomePopularProducts extends StatelessWidget {
   const HomePopularProducts({super.key});
@@ -19,12 +19,12 @@ class HomePopularProducts extends StatelessWidget {
           crossAxisCount: 2,
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
-          childAspectRatio: 0.7,
+          childAspectRatio: 0.72,
         ),
         itemBuilder: (_, __) => Container(
           decoration: BoxDecoration(
             color: Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
       );
@@ -38,7 +38,7 @@ class HomePopularProducts extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
-        childAspectRatio: 0.7,
+        childAspectRatio: 0.72,
       ),
       itemBuilder: (_, index) {
         return ProductCard(product: provider.products[index]);
