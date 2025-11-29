@@ -21,11 +21,6 @@ class ProductImageWidget extends StatelessWidget {
       height: 90,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
-        border: Border.all(
-          color: isSelected ? Colors.blue.shade300 : Colors.blue.shade200, // Only blue
-          width: isSelected ? 1.5 : 1,
-        ),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
@@ -34,24 +29,12 @@ class ProductImageWidget extends StatelessWidget {
             Image.network(
               imageUrl,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: isSelected ? Colors.blue.shade50 : Colors.blue.shade100, // Only blue
-                  child: Icon(
-                    Icons.photo_outlined,
-                    color: isSelected ? Colors.blue.shade400 : Colors.blue.shade300, // Only blue
-                    size: 30,
-                  ),
-                );
-              },
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
                 return Center(
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      isSelected ? Colors.blue.shade500 : Colors.blue.shade400, // Only blue
-                    ),
+
                     value: loadingProgress.expectedTotalBytes != null
                         ? loadingProgress.cumulativeBytesLoaded /
                         loadingProgress.expectedTotalBytes!

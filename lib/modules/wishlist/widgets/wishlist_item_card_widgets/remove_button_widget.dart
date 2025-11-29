@@ -41,7 +41,7 @@ class RemoveButtonWidget extends StatelessWidget {
         ),
         child: Icon(
           Icons.close,
-          color: isSelected ? Colors.blue.shade600 : Colors.blue.shade500, // Only blue
+          color: Colors.blue.shade900,
           size: 18,
         ),
       ),

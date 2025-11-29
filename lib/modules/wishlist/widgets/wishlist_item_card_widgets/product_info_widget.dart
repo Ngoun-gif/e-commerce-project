@@ -28,7 +28,7 @@ class ProductInfoWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: isSelected ? Colors.blue.shade800 : Colors.blue.shade700, // Only blue
+            color: Colors.blue.shade900, // Only blue
             height: 1.3,
           ),
           maxLines: 2,
@@ -41,7 +41,7 @@ class ProductInfoWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,
-            color: isSelected ? Colors.blue.shade600 : Colors.blue.shade500, // Only blue
+            color: Colors.blue.shade900, // Only blue
           ),
         ),
         const SizedBox(height: 12),
@@ -51,7 +51,7 @@ class ProductInfoWidget extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () => CartOperations.addToCart(context, cartProvider, item),
             style: ElevatedButton.styleFrom(
-              backgroundColor: isSelected ? Colors.blue.shade600 : Colors.blue.shade500, // Only blue
+              backgroundColor: Colors.blue.shade900.withOpacity(0.9), // Only blue
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 10),
               shape: RoundedRectangleBorder(

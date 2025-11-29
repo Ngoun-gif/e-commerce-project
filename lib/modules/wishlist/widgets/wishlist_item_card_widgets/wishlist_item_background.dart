@@ -25,11 +25,9 @@ class WishlistItemBackground extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: isSelected
-                ? Colors.blue.shade50
-                : Colors.blue.shade50.withOpacity(0.6), // Only blue colors
+            color:Colors.blue.shade50,
             border: Border.all(
-              color: isSelected ? Colors.blue : Colors.blue.shade100,
+              color: isSelected ? Colors.blue.withOpacity(0.1) : Colors.blue.shade100.withOpacity(0.1),
               width: 1.6,
             ),
           ),

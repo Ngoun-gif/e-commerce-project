@@ -12,24 +12,33 @@ class ProductDetailBody extends StatelessWidget {
       slivers: [
         // IMAGE HEADER
         SliverAppBar(
-          automaticallyImplyLeading: false, // 👈 REMOVE ARROW
-          backgroundColor: Colors.transparent,
-          elevation: 0,
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
           expandedHeight: 300,
+          pinned: true,
+          floating: false,
           flexibleSpace: FlexibleSpaceBar(
             background: Hero(
               tag: product.id,
-              child: Image.network(
-                product.image,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  color: Colors.grey[200],
-                  child: const Icon(Icons.broken_image, size: 80),
+              child: Container(
+                color: Colors.white,
+                child: Center(
+                  child: Image.network(
+                    product.image,
+                    fit: BoxFit.contain,
+                    width: double.infinity,
+                    height: double.infinity,
+                    errorBuilder: (_, __, ___) => Container(
+                      color: Colors.grey[200],
+                      child: const Icon(Icons.broken_image, size: 80),
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+        )
+        ,
 
         // DETAIL CARD
         SliverToBoxAdapter(
