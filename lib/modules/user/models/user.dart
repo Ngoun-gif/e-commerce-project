@@ -1,3 +1,5 @@
+import 'package:flutter_ecom/utils/image_fixer.dart';
+
 class UserModel {
   final int id;
   final String email;
@@ -7,6 +9,7 @@ class UserModel {
   final String phone;
   final bool active;
   final List<String> roles;
+  final String image;
 
   UserModel({
     required this.id,
@@ -17,34 +20,34 @@ class UserModel {
     required this.phone,
     required this.active,
     required this.roles,
+    required this.image,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    print("🔍 UserModel.fromJson() - JSON keys: ${json.keys}");
-    print("🔍 UserModel.fromJson() - id: ${json["id"]} (type: ${json["id"]?.runtimeType})");
-    print("🔍 UserModel.fromJson() - email: ${json["email"]}");
-    print("🔍 UserModel.fromJson() - username: ${json["username"]}");
-
     return UserModel(
-      id: json["id"] ?? 0, // Handle null id
-      email: json["email"] ?? '',
-      username: json["username"] ?? '',
-      firstname: json["firstname"] ?? json["firstName"] ?? '', // Handle different casing
-      lastname: json["lastname"] ?? json["lastName"] ?? '', // Handle different casing
-      phone: json["phone"] ?? '',
-      active: json["active"] ?? json["isActive"] ?? false, // Handle different field names
-      roles: List<String>.from((json["roles"] ?? json["role"] ?? []).map((r) => r.toString())),
+      id: json["id"] ?? 0,
+      email: json["email"] ?? "",
+      username: json["username"] ?? "",
+      firstname: json["firstname"] ?? json["firstName"] ?? "",
+      lastname: json["lastname"] ?? json["lastName"] ?? "",
+      phone: json["phone"] ?? "",
+      active: json["active"] ?? false,
+      roles: List<String>.from(json["roles"] ?? []),
+      image: ImageFixer.fixImagePhoto(json["image"]),
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "email": email,
-    "username": username,
-    "firstname": firstname,
-    "lastname": lastname,
-    "phone": phone,
-    "active": active,
-    "roles": roles,
-  };
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "email": email,
+      "username": username,
+      "firstname": firstname,
+      "lastname": lastname,
+      "phone": phone,
+      "active": active,
+      "roles": roles,
+      "image": image,
+    };
+  }
 }

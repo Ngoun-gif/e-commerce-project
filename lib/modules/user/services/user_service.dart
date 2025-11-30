@@ -6,13 +6,17 @@ import '../../../config/api_config_auth.dart';
 import '../models/user.dart';
 
 class UserService {
+  // ==========================
   // TOKEN
+  // ==========================
   static Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString("accessToken");
   }
 
+  // ==========================
   // HANDLE RESPONSE
+  // ==========================
   static dynamic _handle(http.Response res, String action) {
     if (res.statusCode == 200 || res.statusCode == 201) {
       return jsonDecode(res.body);
@@ -20,9 +24,9 @@ class UserService {
     throw Exception("$action failed: ${res.statusCode} ${res.body}");
   }
 
-  // ================================
-  // GET CURRENT USER
-  // ================================
+  // ==========================
+  // GET /users/me
+  // ==========================
   static Future<UserModel> getMe() async {
     final token = await _getToken();
 
@@ -34,14 +38,14 @@ class UserService {
       },
     );
 
-    final json = _handle(res, "Fetch user profile");
-    return UserModel.fromJson(json);
+    return UserModel.fromJson(_handle(res, "Fetch user profile"));
   }
 
-  // ================================
-  // UPDATE USER PROFILE
-  // ================================
+  // ==========================
+  // PUT /users/{id}
+  // ==========================
   static Future<UserModel> updateProfile({
+    required int id,
     required String firstname,
     required String lastname,
     required String phone,
@@ -49,7 +53,7 @@ class UserService {
     final token = await _getToken();
 
     final res = await http.put(
-      Uri.parse("${ApiConfigAuth.apiBase}/users/profile"),
+      Uri.parse("${ApiConfigAuth.apiBase}/users/$id"),
       headers: {
         "Content-Type": "application/json",
         if (token != null) "Authorization": "Bearer $token",
@@ -61,32 +65,34 @@ class UserService {
       }),
     );
 
-    final json = _handle(res, "Update profile");
-    return UserModel.fromJson(json);
+    return UserModel.fromJson(_handle(res, "Update profile"));
   }
 
-  // ================================
-  // CHANGE PASSWORD
-  // ================================
-  static Future<bool> changePassword({
-    required String oldPassword,
-    required String newPassword,
+  // ==========================
+  // POST /users/{id}/image
+  // ==========================
+  static Future<UserModel> uploadImage({
+    required int id,
+    required String path,
   }) async {
     final token = await _getToken();
 
-    final res = await http.put(
-      Uri.parse("${ApiConfigAuth.apiBase}/users/password"),
-      headers: {
-        "Content-Type": "application/json",
-        if (token != null) "Authorization": "Bearer $token",
-      },
-      body: jsonEncode({
-        "currentPassword": oldPassword,
-        "newPassword": newPassword,
-      }),
+    final req = http.MultipartRequest(
+      "POST",
+      Uri.parse("${ApiConfigAuth.apiBase}/users/$id/image"),
     );
 
-    _handle(res, "Change password");
-    return true;
+    req.headers["Authorization"] = "Bearer $token";
+
+    req.files.add(await http.MultipartFile.fromPath("file", path));
+
+    final res = await req.send();
+    final body = await res.stream.bytesToString();
+
+    if (res.statusCode == 200) {
+      return UserModel.fromJson(jsonDecode(body));
+    }
+
+    throw Exception("Upload image failed: $body");
   }
 }

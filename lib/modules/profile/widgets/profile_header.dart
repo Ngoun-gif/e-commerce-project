@@ -9,8 +9,10 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool hasImage = user.image.isNotEmpty;
+
     return Container(
-      height: 240, // Increased from 200 to 240
+      height: 260,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -23,105 +25,127 @@ class ProfileHeader extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Background Pattern
+          // circle decoration background
           Positioned(
-            right: -50,
-            top: -50,
+            right: -40,
+            top: -40,
             child: Container(
-              width: 150,
-              height: 150,
+              width: 160,
+              height: 160,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
                 shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.12),
               ),
             ),
           ),
 
-          // Centered User Info
           Center(
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Avatar with online indicator
+                  // =========================
+                  //        PROFILE PHOTO
+                  // =========================
                   Stack(
                     children: [
-                      Container(
-                        width: 100, // Increased from 80 to 100
-                        height: 100, // Increased from 80 to 100
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white.withOpacity(0.2),
-                          border: Border.all(color: Colors.white, width: 3),
-                        ),
-                        child: Icon(
-                          Icons.person,
-                          size: 50, // Increased from 40 to 50
-                          color: Colors.white,
+                      ClipOval(
+                        child: Container(
+                          width: 105,
+                          height: 105,
+                          color: Colors.white.withOpacity(0.15),
+                          child: hasImage
+                              ? Image.network(
+                            user.image,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) {
+                              return const Icon(
+                                Icons.person,
+                                size: 50,
+                                color: Colors.white,
+                              );
+                            },
+                          )
+                              : const Icon(
+                            Icons.person,
+                            size: 50,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
+
+                      // ===== ACTIVE DOT =====
                       if (user.active)
                         Positioned(
                           right: 0,
                           bottom: 0,
                           child: Container(
-                            width: 24, // Increased from 20 to 24
-                            height: 24, // Increased from 20 to 24
+                            width: 22,
+                            height: 22,
                             decoration: BoxDecoration(
-                              color: Colors.green,
                               shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
+                              color: Colors.green,
+                              border: Border.all(
+                                width: 2,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
                     ],
                   ),
-                  const SizedBox(width: 20), // Increased from 16 to 20
 
-                  // User Details
+                  const SizedBox(width: 18),
+
+                  // =========================
+                  //         USER INFO
+                  // =========================
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        // Name
                         Text(
                           "${user.firstname} ${user.lastname}",
                           style: const TextStyle(
-                            fontSize: 24, // Increased from 20 to 24
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
-                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 6), // Increased from 4 to 6
+                        const SizedBox(height: 6),
+
+                        // Username
                         Text(
                           "@${user.username}",
                           style: TextStyle(
-                            fontSize: 16, // Increased from 14 to 16
-                            color: Colors.white.withOpacity(0.8),
+                            fontSize: 15,
+                            color: Colors.white.withOpacity(0.85),
                           ),
                         ),
-                        const SizedBox(height: 10), // Increased from 8 to 10
+                        const SizedBox(height: 10),
+
+                        // account status badge
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 16, // Increased from 12 to 16
-                            vertical: 6, // Increased from 4 to 6
+                            horizontal: 14,
+                            vertical: 5,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white.withOpacity(0.22),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             user.active ? "Active Account" : "Inactive",
                             style: const TextStyle(
-                              fontSize: 14, // Increased from 12 to 14
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
                               color: Colors.white,
-                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
