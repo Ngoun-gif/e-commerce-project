@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecom/modules/category/providers/category_by_product_provider.dart';
 import 'package:flutter_ecom/modules/checkout/provider/checkout_provider.dart';
 import 'package:flutter_ecom/modules/payment/provider/payment_provider.dart';
 import 'package:flutter_ecom/modules/payment_history/provider/payment_history_provider.dart';
@@ -77,9 +78,11 @@ class App extends StatelessWidget {
         ),
 
         // Other providers
+        ChangeNotifierProvider(create: (_) => CategoryByProductProvider()),
         ChangeNotifierProvider(create: (_) => ProductDetailProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

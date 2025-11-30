@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'package:flutter_ecom/modules/category/models/category.dart';
 import 'package:http/http.dart' as http;
-import '../../../config/api_config.dart';
-import '../models/category.dart';
+import 'package:flutter_ecom/config/api_config.dart'; // Fixed import
 
 class CategoriesService {
   Future<List<CategoryModel>> fetchCategories() async {
@@ -15,9 +15,9 @@ class CategoriesService {
         return data.map((e) => CategoryModel.fromJson(e)).toList();
       }
 
-      throw Exception("Failed to load categories: ${res.statusCode}");
+      throw Exception("Failed to fetch categories: ${res.statusCode}");
     } catch (e) {
-      throw Exception("Fetch categories error → $e");
+      rethrow;
     }
   }
 }

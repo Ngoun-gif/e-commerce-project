@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
-import '../models/category.dart';
-import '../services/categories_service.dart';
+import 'package:flutter_ecom/modules/category/models/category.dart';
+import 'package:flutter_ecom/modules/category/services/categories_service.dart';
+
+
 
 class CategoriesProvider extends ChangeNotifier {
   final CategoriesService _service = CategoriesService();
 
-  bool _loading = false;
-  bool get loading => _loading;
-
   List<CategoryModel> _categories = [];
-  List<CategoryModel> get categories => _categories;
-
+  bool _loading = false;
   String? _error;
-  String? get error => _error;
-
   int? _selectedId;
-  int? get selectedId => _selectedId;
+  bool _initialLoaded = false;
 
-  // ============================
-  // LOAD DATA
-  // ============================
+  List<CategoryModel> get categories => _categories;
+  bool get loading => _loading;
+  String? get error => _error;
+  int? get selectedId => _selectedId;
+  bool get initialLoaded => _initialLoaded;
+
   Future<void> loadCategories() async {
+    if (_initialLoaded && _categories.isNotEmpty) return;
+
     _loading = true;
     _error = null;
     notifyListeners();
 
     try {
       _categories = await _service.fetchCategories();
+      _initialLoaded = true;
 
-      // OPTIONAL 👉 auto select the first category
       if (_categories.isNotEmpty && _selectedId == null) {
         _selectedId = _categories.first.id;
       }
@@ -41,19 +42,29 @@ class CategoriesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ============================
-  // HANDLE SELECT
-  // ============================
   void selectCategory(int id) {
+    if (_selectedId == id) return;
     _selectedId = id;
     notifyListeners();
   }
 
-  // ============================
-  // RESET SELECTION
-  // ============================
   void clearSelection() {
     _selectedId = null;
     notifyListeners();
+  }
+
+  String getSelectedName() {
+    if (_selectedId == null) return "";
+
+    try {
+      return _categories.firstWhere((c) => c.id == _selectedId).name;
+    } catch (_) {
+      return "";
+    }
+  }
+
+  Future<void> reload() async {
+    _initialLoaded = false;
+    await loadCategories();
   }
 }

@@ -11,9 +11,22 @@ class CategoryModel {
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? "",
-      active: json['active'] ?? false,
+      id: json["id"] ?? 0,
+      name: json["name"] ?? "",
+      active: json["active"] ?? true,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'active': active,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'CategoryModel(id: $id, name: $name, active: $active)';
   }
 }
